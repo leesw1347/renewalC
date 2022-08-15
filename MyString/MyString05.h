@@ -7,6 +7,9 @@
 
 #include <iostream>
 
+// 복사 생산자와 이동 샌산자 그리고 대입 연산자를 호출하는 횟수를 합산하는데 사용
+uint16_t count = 0;
+
 class MyString05 {
 private:
     char *data;
@@ -34,5 +37,6 @@ public:
 
 MyString05 create(const char *ptr = nullptr);
 
+void foo(const char *ptr = nullptr);
 
 #endif //RENEWALC_MYSTRING05_H
