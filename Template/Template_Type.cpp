@@ -35,7 +35,7 @@ template<class T>
 using ptr = T *;
 
 // 타입 템플릿을 사용하는 방법은 아래와 같다.
-ptr<int> x;
+ptr<int> x; // int *x = nullptr;
 
 // 변수 템플릿 (Variable Template)
 template<typename T>
