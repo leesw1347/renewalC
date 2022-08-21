@@ -11,6 +11,8 @@
 
 /*템플릿 인수가 lvalue 참조가 아니라면, 아래 함수 템플릿을 활성화 시킨다
  * lvalue가 아니라면, (변수라면) 해당 템플릿 클래스를 호출한다.
+ * 아래와 같이 typename 지정자를 활용해서, 반환되는 함수의 데이터 타입이 의존타입이란 사실을 명시해줘야 한다.
+ * 컴파일 시점에 활성화 되는 메타 프로그램이기 때문에 2개의 min() 함수는 같은 템플릿 매개변수를 사용하더라도 문제가 발생하지 않는다.
  * */
 template<class T>
 typename std::enable_if<!std::is_lvalue_reference<T>(), T &>::type min(T &a, T &b) {
@@ -18,7 +20,8 @@ typename std::enable_if<!std::is_lvalue_reference<T>(), T &>::type min(T &a, T &
     return (a < b) ? a : b;
 }
 
-/*템플릿 인수가 lvalue 참조이라면 아래 함수 템플릿을 활성화 시킨다.*/
+/*템플릿 인수가 lvalue 참조이라면 아래 함수 템플릿을 활성화 시킨다
+ *만약 아니라면 아래 template은 T 타입에 대해서 참조를 활성화 시키지 않는다.*/
 template<class T>
 typename std::enable_if<std::is_lvalue_reference<T>::value, T>::type min(T a, T b) {
     std::cout << "참조" << std::endl;
@@ -48,6 +51,11 @@ public:
 
     std::string GetName() {
         return name;
+    }
+
+    friend std::ostream &operator<<(std::ostream &os, const Shape &shape) {
+        std::cout << shape.name << "(" << &shape << ")";
+        return os;
     }
 };
 
@@ -84,6 +92,7 @@ public:
  * 연산자 오버로딩은 다음장에서 배운다.
  * */
 bool operator<(Shape &a, Shape b) {
+    std::cout << "여기서 Shape를 연산자 오버로딩을 했습니다 " << a << ", " << b << std::endl;
     return a.Area() < b.Area();
 }
 
@@ -109,5 +118,12 @@ int main(int argc, char *argv[]) {
     std::cout << "2. 최소값 : " << min<int &>(tmp03, tmp04) << std::endl;
     std::cout << "3. 최소값 : " << min(a, b) << std::endl;
 
+    Rectangle shape01 = Rectangle("직사각형", 10, 5);
+    Circle shape02 = Circle(10);
+    std::cout << "4. 최소값 : ";
+    Shape &s1 = min<Shape &>(shape01, shape02);
 
+    std::cout << "5. 최소값 : ";
+    Shape &s2 = min<Shape>(shape01, shape02);
+    s2.GetArea();
 }
