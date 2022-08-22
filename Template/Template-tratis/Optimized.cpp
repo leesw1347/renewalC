@@ -64,6 +64,40 @@ public:
     }
 };
 
+/* 템플릿 클래스의 또 다른 예는 아래와 같다.*/
+template<class T>
+class OBase {
+protected:
+    T data;
+    typedef T type;
+public:
+    void set(const T &val) {
+        data = val;
+    }
+
+    T get() {
+        std::cout << __PRETTY_FUNCTION__ << std::endl;
+        return data;
+    }
+};
+
+template<class T, class U>
+class ODerived : public T {
+private:
+    U derived;
+    typename T::type dtype;
+public:
+    ODerived(U &val) : derived(val) {
+    }
+
+    U get() {
+        std::cout << __PRETTY_FUNCTION__;
+        return derived;
+
+    }
+
+};
+
 int main(int argc, char *argv[]) {
 
     Optimized<int> e(100);
@@ -77,4 +111,8 @@ int main(int argc, char *argv[]) {
     Other<Base<int>> o(1500);
     std::cout << "Other 객체 : " << o.GetData() << std::endl;
     o.Display();
+
+    std::string str("안녕하세요!");
+    ODerived<OBase<int>, std::string> showtime(str);
+    std::cout << showtime.get() << " " << showtime.OBase<int>::get() << std::endl;
 }
