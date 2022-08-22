@@ -93,9 +93,7 @@ public:
     U get() {
         std::cout << __PRETTY_FUNCTION__;
         return derived;
-
     }
-
 };
 
 int main(int argc, char *argv[]) {
